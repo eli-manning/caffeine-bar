@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+
+    <AssemblyName>CaffeineBar</AssemblyName>
+    <RootNamespace>CaffeineBar</RootNamespace>
+    <AssemblyTitle>Caffeine Bar</AssemblyTitle>
+    <Product>Caffeine Bar</Product>
+    <Version>1.2.0</Version>
+    <FileVersion>1.2.0.4</FileVersion>
+
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>Resources\AppIcon.ico</ApplicationIcon>
+
+    <!-- Lets the project compile from macOS/Linux as well as Windows. -->
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
+    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Sources\**\*.cs" />
+    <Compile Include="Sources\**\*.cs" />
+  </ItemGroup>
+
+</Project>

@@ -1,6 +1,8 @@
 # Caffeine Bar ⚡
 
-A tiny, free, open source macOS menu bar app that keeps your Mac's display awake, styled like a drink bar living in your menu bar.
+A tiny, free, open source menu bar app that keeps your display awake, styled like a drink bar living in your menu bar.
+
+**On Windows?** There's a full port with the same features in [`windows/`](windows/README.md).
 
 Click the icon to toggle it:
 
@@ -45,6 +47,12 @@ git clone https://github.com/eli-manning/caffeine-bar.git
 cd caffeine-bar
 ./build.sh --install
 ```
+
+---
+
+## Windows
+
+A Windows port lives in [`windows/`](windows/README.md) — same features, same menu, same icons, rebuilt on Win32 APIs (`SetThreadExecutionState` for the sleep assertion, a `NotifyIcon` tray item, and `powercfg` for the lid-close override). See its README for install instructions and a table mapping each macOS API to its Windows counterpart.
 
 ---
 
