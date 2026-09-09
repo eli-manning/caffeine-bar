@@ -47,22 +47,19 @@ Everything the macOS build does:
 
 Requires Windows 10 (1809+) or Windows 11.
 
-### Download a release
+### Install
 
-Grab the zip for your architecture from the
-[latest release](https://github.com/eli-manning/caffeine-bar/releases/latest):
+Download **[Caffeine-Bar-Setup.exe](https://github.com/eli-manning/caffeine-bar/releases/latest)**
+and run it.
 
-| Your PC | File |
-| --- | --- |
-| Intel or AMD (almost everyone) | `Caffeine-Bar-win-x64.zip` |
-| Arm (Surface Pro X, Dev Kit, Windows on Arm VMs) | `Caffeine-Bar-win-arm64.zip` |
+That's it. One installer works on both Intel/AMD and Arm PCs, installs for your
+user account only so there's no admin prompt, adds a Start menu entry, and can
+start Caffeine Bar with Windows if you tick the box. Uninstall from **Settings >
+Apps** like anything else.
 
-Not sure which? **Settings > System > About > System type** tells you.
-
-Unzip it somewhere permanent (`%LOCALAPPDATA%\Programs\Caffeine Bar` is what
-the build script uses) and run `CaffeineBar.exe`. It's self-contained, so you
-don't need .NET installed. Turn on **Launch at Login** from the right-click menu
-if you want it to start with Windows.
+SmartScreen will warn you the first time, because the installer isn't
+code-signed: click **More info** > **Run anyway**. See
+[SmartScreen and antivirus](#smartscreen-and-antivirus) below for why.
 
 ### Build from source
 
@@ -85,7 +82,9 @@ machine you run it on doesn't need .NET installed. `-Install` copies it to
 `%LOCALAPPDATA%\Programs\Caffeine Bar` and starts it.
 
 `-SingleFile` bundles it all into one `.exe` instead, which is easier to hand to
-someone but more likely to be flagged by antivirus (see below).
+someone but more likely to be flagged by antivirus (see below). `-Installer`
+builds `Caffeine-Bar-Setup.exe`, the same artifact the release workflow ships,
+and needs [Inno Setup](https://jrsoftware.org/isdl.php) 6.3 or newer.
 
 ### First run
 
@@ -131,9 +130,10 @@ sees the SmartScreen warning and some scanners will object. There is no free
 workaround; reputation-based systems like SmartScreen are specifically designed
 so that unsigned binaries from unknown publishers can't build trust cheaply.
 
-To uninstall: quit from the tray menu, delete
-`%LOCALAPPDATA%\Programs\Caffeine Bar`, and see "Prevent Sleep on Lid Close"
-below if you ever enabled it.
+If you installed with `Caffeine-Bar-Setup.exe`, uninstall from **Settings >
+Apps**. For a build you unzipped or compiled yourself, quit from the tray menu
+and delete the folder. Either way, see "Prevent Sleep on Lid Close" below if you
+ever turned that on, since its scheduled tasks outlive both.
 
 ---
 

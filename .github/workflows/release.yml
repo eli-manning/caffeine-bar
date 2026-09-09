@@ -175,7 +175,7 @@ jobs:
           sed -i -E "s|version=\"[0-9.]+\" name=\"CaffeineBar.app\"|version=\"$VERSION.0\" name=\"CaffeineBar.app\"|" app.manifest
           grep -n "<Version>\|<FileVersion>" CaffeineBar.Windows.csproj
 
-      - name: Build and package both architectures
+      - name: Publish both architectures
         working-directory: windows
         shell: bash
         # Multi-file rather than single-file on purpose: a self-contained
@@ -183,21 +183,46 @@ jobs:
         # what a packer looks like, and antivirus flags it far more often.
         run: |
           set -euo pipefail
-          mkdir -p dist
           for rid in win-x64 win-arm64; do
             dotnet publish CaffeineBar.Windows.csproj \
               --configuration Release --runtime "$rid" --self-contained true \
-              --output "bin/release/$rid"
-            test -f "bin/release/$rid/CaffeineBar.exe"
-            (cd "bin/release/$rid" && 7z a -tzip "../../../dist/Caffeine-Bar-$rid.zip" .)
-            echo "packaged $rid"
+              --output "installer/payload/$rid"
+            test -f "installer/payload/$rid/CaffeineBar.exe"
+            echo "published $rid"
           done
-          ls -la dist
+
+      - name: Install Inno Setup
+        run: choco install innosetup --no-progress -y
+
+      - name: Build the installer
+        working-directory: windows/installer
+        shell: bash
+        env:
+          VERSION: ${{ needs.version.outputs.version }}
+        run: |
+          set -euo pipefail
+          "/c/Program Files (x86)/Inno Setup 6/ISCC.exe" \
+            "/DAppVersion=$VERSION" CaffeineBar.iss
+
+      - name: Verify the installer
+        working-directory: windows/installer
+        shell: bash
+        # Both payloads are ~160 MB before compression, so anything under 40 MB
+        # means one of the two Check-gated file sets silently matched nothing
+        # and the installer would ship with no app inside it.
+        run: |
+          set -euo pipefail
+          SETUP=dist/Caffeine-Bar-Setup.exe
+          test -f "$SETUP"
+          SIZE=$(stat -c%s "$SETUP")
+          echo "installer is $SIZE bytes"
+          test "$SIZE" -gt 40000000
+          echo "installer OK"
 
       - uses: actions/upload-artifact@v4
         with:
           name: windows
-          path: windows/dist/*.zip
+          path: windows/installer/dist/Caffeine-Bar-Setup.exe
           if-no-files-found: error
 
   # One job creates the release with every asset attached, so the two builds
@@ -222,8 +247,7 @@ jobs:
           files: |
             artifacts/macos/Caffeine-Bar.dmg
             artifacts/macos/Caffeine-Bar.zip
-            artifacts/windows/Caffeine-Bar-win-x64.zip
-            artifacts/windows/Caffeine-Bar-win-arm64.zip
+            artifacts/windows/Caffeine-Bar-Setup.exe
 
   # Point the Homebrew cask at the release that was just published. The cask
   # pins its download by hash, so without this `brew install` keeps handing
