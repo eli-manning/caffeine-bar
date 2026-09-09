@@ -19,13 +19,9 @@ APP="$DERIVED_DATA/Build/Products/Release/$APP_NAME.app"
 xcodegen generate
 xcodebuild -project CaffeineBar.xcodeproj -scheme CaffeineBar -configuration Release -derivedDataPath "$DERIVED_DATA" build
 
-# xcodegen doesn't wire up a Copy Bundle Resources phase for these, so add them
-# manually and re-sign (any change to a signed bundle invalidates its signature).
-mkdir -p "$APP/Contents/Resources"
-if [ -f Resources/AppIcon.icns ]; then
-	cp Resources/AppIcon.icns "$APP/Contents/Resources/AppIcon.icns"
-fi
-
+# Re-sign with a real Apple Development identity. xcodebuild already signs the
+# bundle, but an ad-hoc signature is silently denied a menu bar status item on
+# macOS 26, so prefer a genuine identity whenever one is available.
 SIGN_IDENTITY="$(security find-identity -v -p codesigning | grep -m1 'Apple Development' | sed -E 's/^[[:space:]]*[0-9]+\) ([A-F0-9]+) .*/\1/')"
 ENTITLEMENTS="$DERIVED_DATA/Build/Intermediates.noindex/CaffeineBar.build/Release/CaffeineBar.build/$APP_NAME.app.xcent"
 if [ -n "$SIGN_IDENTITY" ] && [ -f "$ENTITLEMENTS" ]; then

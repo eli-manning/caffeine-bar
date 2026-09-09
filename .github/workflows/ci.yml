@@ -67,7 +67,9 @@ jobs:
           plutil -lint "$APP/Contents/Info.plist"
           test -x "$APP/Contents/MacOS/Caffeine Bar"
           ICON=$(plutil -extract CFBundleIconFile raw "$APP/Contents/Info.plist")
-          test -f "$APP/Contents/Resources/$ICON"
+          # CFBundleIconFile may legally omit the extension, and this one does.
+          test -f "$APP/Contents/Resources/$ICON" \
+            || test -f "$APP/Contents/Resources/$ICON.icns"
           # LSUIElement is what keeps this out of the Dock; losing it turns a
           # menu bar app into a windowless app with a permanent Dock icon.
           test "$(plutil -extract LSUIElement raw "$APP/Contents/Info.plist")" = "true"

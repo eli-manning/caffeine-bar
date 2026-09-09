@@ -134,6 +134,10 @@ jobs:
           STAMPED=$(plutil -extract CFBundleShortVersionString raw "$MP/Caffeine Bar.app/Contents/Info.plist")
           test "$STAMPED" = "$VERSION"
           test -x "$MP/Caffeine Bar.app/Contents/MacOS/Caffeine Bar"
+          ICON=$(plutil -extract CFBundleIconFile raw "$MP/Caffeine Bar.app/Contents/Info.plist")
+          # CFBundleIconFile may legally omit the extension, and this one does.
+          test -f "$MP/Caffeine Bar.app/Contents/Resources/$ICON" \
+            || test -f "$MP/Caffeine Bar.app/Contents/Resources/$ICON.icns"
           # arm64 is what the Homebrew cask declares; a mismatched bundle would
           # install cleanly and then fail to launch.
           lipo -archs "$MP/Caffeine Bar.app/Contents/MacOS/Caffeine Bar" | grep -qw arm64

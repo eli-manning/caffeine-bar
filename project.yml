@@ -8,8 +8,10 @@ targets:
     deploymentTarget: "13.0"
     sources:
       - Sources/Caffeine
-    resources:
-      - Resources/AppIcon.icns
+      # xcodegen has no top-level `resources` key; a file only reaches the
+      # bundle by being a source with an explicit resources build phase.
+      - path: Resources/AppIcon.icns
+        buildPhase: resources
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.elimanning.caffeinebar
