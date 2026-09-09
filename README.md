@@ -53,7 +53,9 @@ cd caffeine-bar
 
 ## Windows
 
-A Windows port lives in [`windows/`](windows/README.md) — same features, same menu, same icons, rebuilt on Win32 APIs (`SetThreadExecutionState` for the sleep assertion, a `NotifyIcon` tray item, and `powercfg` for the lid-close override). See its README for install instructions and a table mapping each macOS API to its Windows counterpart.
+A Windows port lives in [`windows/`](windows/README.md) — same features, same menu, same icons, rebuilt on Win32 APIs (`SetThreadExecutionState` for the sleep assertion, a `NotifyIcon` tray item, and `powercfg` for the lid-close override).
+
+Download `Caffeine-Bar-win-x64.zip` (or `win-arm64`) from the [latest release](https://github.com/eli-manning/caffeine-bar/releases/latest), unzip, and run `CaffeineBar.exe` — it's self-contained, so .NET isn't required. See the [Windows README](windows/README.md) for the rest, including a table mapping each macOS API to its Windows counterpart.
 
 ---
 

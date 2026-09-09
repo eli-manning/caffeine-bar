@@ -47,6 +47,23 @@ Everything the macOS build does:
 
 Requires Windows 10 (1809+) or Windows 11.
 
+### Download a release
+
+Grab the zip for your architecture from the
+[latest release](https://github.com/eli-manning/caffeine-bar/releases/latest):
+
+| Your PC | File |
+| --- | --- |
+| Intel or AMD (almost everyone) | `Caffeine-Bar-win-x64.zip` |
+| Arm (Surface Pro X, Dev Kit, Windows on Arm VMs) | `Caffeine-Bar-win-arm64.zip` |
+
+Not sure which? **Settings > System > About > System type** tells you.
+
+Unzip it somewhere permanent (`%LOCALAPPDATA%\Programs\Caffeine Bar` is what
+the build script uses) and run `CaffeineBar.exe`. It's self-contained, so you
+don't need .NET installed. Turn on **Launch at Login** from the right-click menu
+if you want it to start with Windows.
+
 ### Build from source
 
 Requires the [.NET SDK 8.0+](https://dotnet.microsoft.com/download).

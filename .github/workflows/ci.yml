@@ -1,0 +1,106 @@
+name: CI
+
+# Every push and PR that touches either build. Kept separate from `release.yml`
+# so a compile break fails fast on a branch, rather than only surfacing once a
+# tag is cut and the release is already half-published.
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'Sources/**'
+      - 'Resources/**'
+      - 'windows/**'
+      - 'project.yml'
+      - 'build.sh'
+      - '.github/workflows/ci.yml'
+  pull_request:
+    paths:
+      - 'Sources/**'
+      - 'Resources/**'
+      - 'windows/**'
+      - 'project.yml'
+      - 'build.sh'
+      - '.github/workflows/ci.yml'
+  workflow_dispatch:
+
+concurrency:
+  # A newer push to the same branch makes an in-flight run redundant.
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  mac:
+    # macos-14+ runners are Apple Silicon, which is what the app targets.
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install xcodegen
+        run: brew install xcodegen
+
+      - name: Generate the Xcode project
+        run: xcodegen generate
+
+      - name: Build
+        # Ad-hoc signed and with the team cleared: the runner has no access to
+        # the Developer ID in project.yml, and automatic signing would fail
+        # looking for it. Release signing is handled in release.yml.
+        run: |
+          set -euo pipefail
+          xcodebuild -project CaffeineBar.xcodeproj \
+            -scheme CaffeineBar \
+            -configuration Release \
+            -derivedDataPath .build/xcode \
+            CODE_SIGN_IDENTITY="-" \
+            CODE_SIGN_STYLE=Manual \
+            DEVELOPMENT_TEAM="" \
+            build
+
+      - name: Validate the bundle
+        # Bundling is where the non-code failures live (a malformed Info.plist,
+        # an icon naming a file that isn't there), so exercise it every run
+        # instead of discovering it at release time.
+        run: |
+          set -euo pipefail
+          APP=".build/xcode/Build/Products/Release/Caffeine Bar.app"
+          plutil -lint "$APP/Contents/Info.plist"
+          test -x "$APP/Contents/MacOS/Caffeine Bar"
+          ICON=$(plutil -extract CFBundleIconFile raw "$APP/Contents/Info.plist")
+          test -f "$APP/Contents/Resources/$ICON"
+          # LSUIElement is what keeps this out of the Dock; losing it turns a
+          # menu bar app into a windowless app with a permanent Dock icon.
+          test "$(plutil -extract LSUIElement raw "$APP/Contents/Info.plist")" = "true"
+          codesign --verify --strict "$APP"
+          echo "bundle OK"
+
+  windows:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Build
+        working-directory: windows
+        # Warnings as errors: this project builds clean today, and the tray
+        # icon code leaks GDI handles quietly if a disposal warning is ignored.
+        run: dotnet build CaffeineBar.Windows.csproj --configuration Release -warnaserror
+
+      - name: Publish both architectures
+        working-directory: windows
+        # x64 is what almost every user runs; arm64 is the only one that has
+        # actually been exercised by hand, so neither can be left unbuilt.
+        shell: bash
+        run: |
+          set -euo pipefail
+          for rid in win-x64 win-arm64; do
+            dotnet publish CaffeineBar.Windows.csproj \
+              --configuration Release --runtime "$rid" --self-contained true \
+              --output "bin/ci/$rid"
+            test -f "bin/ci/$rid/CaffeineBar.exe"
+            echo "ok $rid"
+          done
