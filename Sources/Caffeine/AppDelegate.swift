@@ -44,6 +44,24 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             button.addSubview(iconView)
         }
         updateIcon(animated: false)
+
+        // A menu bar icon explains none of itself: click, hover and right-click
+        // all do different things here. Walk through it once on first launch.
+        if !UserDefaults.standard.bool(forKey: "hasSeenTutorial") {
+            UserDefaults.standard.set(true, forKey: "hasSeenTutorial")
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.9) { [weak self] in
+                self?.showTutorial()
+            }
+        }
+    }
+
+    private var tutorialWindow: TutorialWindow?
+
+    private func showTutorial() {
+        if tutorialWindow == nil {
+            tutorialWindow = TutorialWindow()
+        }
+        tutorialWindow?.present()
     }
 
     func applicationWillTerminate(_ notification: Notification) {
@@ -240,6 +258,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             self.menuWindow.setPreventSleepOnLidClose(self.preventSleepOnLidClose)
             self.applyLidSleepState()
         }
+        window.onShowTutorial = { [weak self] in self?.showTutorial() }
         window.onQuit = { NSApp.terminate(nil) }
         window.onClose = { [weak self] in self?.statusItem.button?.highlight(false) }
         window.onHoverEnter = { [weak self] in self?.pendingHoverHide?.cancel() }

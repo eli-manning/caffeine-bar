@@ -20,9 +20,10 @@ No account, no telemetry, no background noise.
   - **Coffee**: a cup that fills with color and puffs steam wisps when activated.
 - **A fully custom menu, not the native macOS one**: a hand-built, borderless dark panel with colored icon chips and hover-highlighted rows.
   - **Hover** the icon to open the full menu: status header, drink pickers, icon style switch, login toggle, and quit.
-  - **Right-click** for a compact menu with just Launch at Login and Quit.
+  - **Right-click** for a compact menu with Launch at Login, Prevent Sleep on Lid Close, Tutorial, and Quit.
 - **"Get an Energy Drink"**: pick a brand (Red Bull, Monster Energy, Celsius, Bang Energy, Rockstar Energy), then jump to nearby stores on Apple or Google Maps, or search DoorDash, Instacart, and Uber Eats.
 - **"Get a Coffee"**: same destination picker, aimed at nearby coffee shops instead.
+- **Built-in tutorial**: a short walkthrough on first launch, reopenable anytime from the right-click menu.
 - **Launch at login**: toggle auto-start from the menu.
 - **Light and dark mode**: adapts to your macOS system theme (the menu panel itself stays dark either way).
 

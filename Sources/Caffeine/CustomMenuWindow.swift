@@ -50,6 +50,7 @@ final class CustomMenuWindow: NSPanel {
     var onSelectIconStyle: ((IconStyle) -> Void)?
     var onToggleLaunchAtLogin: (() -> Void)?
     var onTogglePreventSleepOnLidClose: (() -> Void)?
+    var onShowTutorial: (() -> Void)?
     var onQuit: (() -> Void)?
     var onClose: (() -> Void)?
 
@@ -295,6 +296,16 @@ final class CustomMenuWindow: NSPanel {
                 indent: 12,
                 accessory: .checkmark(selected: preventSleepOnLidClose),
                 onSelect: { [weak self] in self?.onTogglePreventSleepOnLidClose?() }
+            ),
+            MenuRowView(
+                title: "Tutorial",
+                symbolName: "questionmark.circle",
+                tint: styleTint,
+                indent: 12,
+                onSelect: { [weak self] in
+                    self?.onShowTutorial?()
+                    self?.hide()
+                }
             ),
             MenuSeparatorView(),
             MenuRowView(
