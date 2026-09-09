@@ -12,8 +12,8 @@
     <RootNamespace>CaffeineBar</RootNamespace>
     <AssemblyTitle>Caffeine Bar</AssemblyTitle>
     <Product>Caffeine Bar</Product>
-    <Version>1.3.1</Version>
-    <FileVersion>1.3.1.6</FileVersion>
+    <Version>1.3.2</Version>
+    <FileVersion>1.3.2.7</FileVersion>
 
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>Resources\AppIcon.ico</ApplicationIcon>
