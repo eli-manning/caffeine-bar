@@ -19,30 +19,31 @@ public sealed class TutorialWindow : Form
     private static readonly Step[] Steps =
     [
         new("Keep your PC awake",
-            "Caffeine Bar holds a display-awake request for as long as it's active, so your "
-            + "screen won't sleep and your session stays alive. Switch it off and your normal "
-            + "power plan applies again — nothing is changed permanently."),
+            "Caffeine Bar stops your screen from sleeping for as long as it's active, so "
+            + "your session stays alive. Switch it off and your normal power plan takes "
+            + "over again. It doesn't change anything permanently."),
 
         new("Find the icon",
-            "Windows hides newly-installed tray icons, so Caffeine Bar starts out behind the "
-            + "˄ arrow next to the clock.\n\nTo keep it visible, open Settings › "
-            + "Personalization › Taskbar › Other system tray icons and switch "
-            + "Caffeine Bar on. Dragging it out of the ˄ flyout does the same thing."),
+            "Windows hides newly installed tray icons, so Caffeine Bar starts out behind "
+            + "the \u02C4 arrow next to the clock.\n\nTo keep it on show, open Settings \u203A "
+            + "Personalization \u203A Taskbar \u203A Other system tray icons and switch Caffeine "
+            + "Bar on. Dragging it out of the \u02C4 flyout does the same thing."),
 
         new("Click to toggle",
-            "Click the icon to switch it on and off.\n\nFilled means active — the can fills in "
-            + "and sprouts wings, or the cup puffs steam, depending on your icon style. An "
-            + "empty outline means it's off."),
+            "Click the icon to switch it on and off.\n\nFilled means it's running: the can "
+            + "fills in and sprouts wings, or the cup puffs steam, depending on the icon "
+            + "style you picked. An empty outline means it's off."),
 
         new("Hover for the menu",
-            "Hover the icon to open the full panel: how long you've been active, the energy "
-            + "drink and coffee finders, and the icon style switch.\n\nPick Coffee or Energy "
-            + "Drink under Icon Style to change which drink the icon shows."),
+            "Hover the icon to open the full panel. It shows how long you've been active, "
+            + "the energy drink and coffee finders, and the icon style switch.\n\nPick "
+            + "Coffee or Energy Drink under Icon Style to change which drink the icon shows."),
 
         new("Right-click for settings",
-            "Right-click for Launch at Login, Prevent Sleep on Lid Close, this tutorial, and Quit."
-            + "\n\nLid close is a hardware sleep trigger, so it needs admin rights once. Caffeine "
-            + "Bar registers two scheduled tasks that first time and never has to ask again."),
+            "Right-click for Launch at Login, Prevent Sleep on Lid Close, this tutorial, "
+            + "and Quit.\n\nClosing the lid puts the PC to sleep in hardware, so that one "
+            + "needs admin rights the first time. Caffeine Bar registers two scheduled "
+            + "tasks covering only that change, then never has to ask again."),
     ];
 
     private int _index;
