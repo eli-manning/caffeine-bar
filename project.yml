@@ -19,6 +19,6 @@ targets:
         INFOPLIST_FILE: Resources/Info.plist
         CODE_SIGN_STYLE: Automatic
         DEVELOPMENT_TEAM: 6K4VZU48G9
-        MARKETING_VERSION: "1.3.0"
-        CURRENT_PROJECT_VERSION: "5"
+        MARKETING_VERSION: "1.3.1"
+        CURRENT_PROJECT_VERSION: "6"
         GENERATE_INFOPLIST_FILE: NO
